@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
@@ -47,9 +48,9 @@ public class App {
 		window.setTitle("Image Resize");
 		//window.setResizable(false);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setSize(400, 370);
+		window.setSize(400, 380);
 		window.setLocationRelativeTo(null);
-		
+		window.setResizable(false);
 		
 		// Panel
 		final JPanel panel = new JPanel();
@@ -68,22 +69,23 @@ public class App {
 			public void actionPerformed(ActionEvent arg0) {
 				// Si un répertoire a été choisi dans le jFileChooser
 				if (openDialog(panel) == JFileChooser.APPROVE_OPTION) {
-					window.setSize(400, 420);
-					
-					boutonChoisir.setVisible(false);
-					String folderPath = jFileChooser.getSelectedFile().getAbsolutePath();
-					label.setText("Dossier: " + folderPath);
-					panel.add(label);
-					
-					// Progress bar
-					progressBar.setStringPainted(true);
-					progressBar.setValue(0);
-					progressBar.repaint();
-					panel.add(progressBar);
-					
+					// Récupère le chemin sélectionné
 					rootFolder = jFileChooser.getSelectedFile();
 					File[] listFiles = rootFolder.listFiles(fileFilter);
+					// Si des images sont trouvées dans le dossier sélectionner
 					if (listFiles.length > 0) {
+						window.setSize(400, 420);
+						boutonChoisir.setVisible(false);
+						String folderPath = jFileChooser.getSelectedFile().getAbsolutePath();
+						label.setText("Dossier: " + folderPath);
+						panel.add(label);
+						
+						// Progress bar
+						progressBar.setStringPainted(true);
+						progressBar.setValue(0);
+						progressBar.repaint();
+						panel.add(progressBar);
+						
 						panel.add(label2);
 						resizeFiles(listFiles);
 						progressBar.setValue(progressBar.getMaximum());
@@ -100,6 +102,9 @@ public class App {
 								window.dispose();
 							}
 						});
+					} else {
+						// Aucune image dans le dossier, on affiche un message d'alerte
+						JOptionPane.showMessageDialog(window, "Merci de sélectionner un dossier avec des images.");
 					}
 				}
 			}
@@ -108,6 +113,7 @@ public class App {
 		// Ajoute le bouton au Panel
 		panel.add(boutonChoisir);
 		window.setContentPane(panel);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
 	
