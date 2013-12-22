@@ -1,0 +1,8 @@
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+*.project
+*.settings
